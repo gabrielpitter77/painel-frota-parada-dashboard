@@ -301,6 +301,7 @@
     <div class="filter-chip" data-status="critico">Crítico</div>
     <div class="filter-chip" data-status="atencao">Atenção</div>
     <div class="filter-chip" data-status="normal">Normal</div>
+    <button id="btnExportar" class="filter-chip" style="margin-left:auto;">📥 Exportar CSV</button>
   </div>
 
   <section class="panel table-panel">
@@ -324,6 +325,7 @@
     </div>
     <div class="table-footer">
       <span id="rowCount">0 registros</span>
+      <span id="dupNotice"></span>
       <span>ATUALIZADO AO ABRIR A PÁGINA</span>
     </div>
   </section>
@@ -424,6 +426,7 @@ async function fetchAba(atendente){
 
 let frota = [];
 let atendentesComErro = [];
+let duplicadasRemovidas = 0;
 
 async function carregarFrota(){
   const resultados = await Promise.all(ATENDENTES.map(fetchAba));
@@ -431,6 +434,20 @@ async function carregarFrota(){
     if(res === null){ atendentesComErro.push(ATENDENTES[i].nome); }
     else{ frota = frota.concat(res); }
   });
+
+  // deduplicação por placa — quando o mesmo veículo aparece mais de uma vez
+  // (ex: dois registros de manutenção para a mesma placa), mantém só o
+  // registro com mais dias parado, que é o mais crítico/atualizado
+  const porPlaca = {};
+  frota.forEach(function(v){
+    const chave = v.placa;
+    if(!porPlaca[chave] || v.dias > porPlaca[chave].dias){ porPlaca[chave] = v; }
+  });
+  const duplicadas = frota.length - Object.keys(porPlaca).length;
+  frota = Object.values(porPlaca);
+  duplicadasRemovidas = duplicadas;
+  if(duplicadas > 0) console.warn(duplicadas + ' registro(s) duplicado(s) por placa foram removidos.');
+
   return frota;
 }
 </script>
@@ -650,6 +667,7 @@ let sortDir = -1;
 let statusFilter = 'todos';
 let atendenteFilter = 'todos';
 let searchTerm = '';
+let linhasFiltradasAtuais = [];
 
 function renderTable(){
   let rows = frota.filter(v => {
@@ -670,6 +688,8 @@ function renderTable(){
     return 0;
   });
 
+  linhasFiltradasAtuais = rows;
+
   document.getElementById('tableBody').innerHTML = rows.map(v => {
     const solucao = [v.pendencia, v.obs].filter(Boolean).join(' — ') || '-';
     return `
@@ -688,6 +708,9 @@ function renderTable(){
   }).join('');
 
   document.getElementById('rowCount').textContent = `${rows.length} registro${rows.length!==1?'s':''}`;
+  document.getElementById('dupNotice').textContent = duplicadasRemovidas > 0
+    ? `${duplicadasRemovidas} duplicata${duplicadasRemovidas!==1?'s':''} removida${duplicadasRemovidas!==1?'s':''} (mesma placa)`
+    : '';
 }
 
 document.querySelectorAll('thead th').forEach(th => {
@@ -713,7 +736,7 @@ document.getElementById('atendenteSelect').addEventListener('change', (e) => {
 
 function aplicarFiltroStatus(status){
   statusFilter = status;
-  document.querySelectorAll('.filter-chip').forEach(c => {
+  document.querySelectorAll('.filter-chip[data-status]').forEach(c => {
     c.classList.remove('active','critico','atencao','normal');
     if(c.dataset.status === status){
       c.classList.add('active');
@@ -724,7 +747,7 @@ function aplicarFiltroStatus(status){
   renderTable();
 }
 
-document.querySelectorAll('.filter-chip').forEach(chip => {
+document.querySelectorAll('.filter-chip[data-status]').forEach(chip => {
   chip.addEventListener('click', () => aplicarFiltroStatus(chip.dataset.status));
 });
 
@@ -747,6 +770,51 @@ carregarFrota().then(() => {
   });
   renderDashboard();
 });
+
+function exportarCSV(){
+  const colunas = [
+    { titulo: 'Atendente', campo: 'atendente' },
+    { titulo: 'Motivo', campo: 'motivo' },
+    { titulo: 'Placa', campo: 'placa' },
+    { titulo: 'Veículo', campo: 'veiculo' },
+    { titulo: 'Cliente', campo: 'cliente' },
+    { titulo: 'Fornecedor', campo: 'fornecedor' },
+    { titulo: 'Dias parado', campo: 'dias' },
+    { titulo: 'Solução', campo: null }, // calculado abaixo
+    { titulo: 'Status', campo: 'status' },
+  ];
+
+  function escaparCSV(valor){
+    const texto = (valor === null || valor === undefined) ? '' : String(valor);
+    if(/[",;\n]/.test(texto)) return '"' + texto.replace(/"/g, '""') + '"';
+    return texto;
+  }
+
+  const linhas = linhasFiltradasAtuais.map(function(v){
+    const solucao = [v.pendencia, v.obs].filter(Boolean).join(' — ') || '-';
+    return colunas.map(function(c){
+      return escaparCSV(c.campo ? v[c.campo] : solucao);
+    }).join(';');
+  });
+
+  const cabecalho = colunas.map(c => escaparCSV(c.titulo)).join(';');
+  // BOM (\uFEFF) no início garante acentuação correta ao abrir no Excel
+  const csv = '\uFEFF' + [cabecalho].concat(linhas).join('\r\n');
+
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const agora = new Date();
+  const timestamp = agora.toISOString().slice(0,10);
+  a.href = url;
+  a.download = 'frota_parada_' + timestamp + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+document.getElementById('btnExportar').addEventListener('click', exportarCSV);
 </script>
 </body>
 </html>
