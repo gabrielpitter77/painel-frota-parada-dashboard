@@ -38,7 +38,6 @@
   ::selection{background:var(--blue-dim); color:var(--text);}
   a{color:inherit;}
 
-  /* ---------- utility ---------- */
   .mono{font-family:'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums;}
   .display{font-family:'Space Grotesk', sans-serif;}
   .eyebrow{
@@ -59,7 +58,6 @@
   .panel::before{ top:-1px; left:-1px; border-right:none; border-bottom:none; }
   .panel::after{ bottom:-1px; right:-1px; border-left:none; border-top:none; }
 
-  /* ---------- header ---------- */
   header{
     border-bottom:1px solid var(--border);
     background:rgba(11,14,20,0.92);
@@ -93,7 +91,6 @@
   .live-label{font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-muted); display:flex; align-items:center; gap:7px;}
   #clock{font-family:'IBM Plex Mono'; font-size:12px; color:var(--text-muted);}
 
-  /* ticker */
   .ticker-wrap{
     border-top:1px solid var(--border);
     background:var(--panel-2);
@@ -114,7 +111,6 @@
 
   main{max-width:1440px; margin:0 auto; padding:28px;}
 
-  /* ---------- KPI row ---------- */
   .kpi-grid{
     display:grid;
     grid-template-columns:repeat(5, 1fr);
@@ -132,7 +128,6 @@
   .kpi.accent-atencao .value{color:var(--atencao);}
   .kpi.accent-normal .value{color:var(--normal);}
 
-  /* ---------- section title ---------- */
   .section-head{
     display:flex; align-items:baseline; justify-content:space-between;
     margin-bottom:12px;
@@ -140,13 +135,11 @@
   .section-head h2{font-family:'Space Grotesk'; font-size:14px; font-weight:600; letter-spacing:0.01em;}
   .section-head .eyebrow{margin:0;}
 
-  /* ---------- two-col layout ---------- */
   .row-2{display:grid; grid-template-columns:1.6fr 1fr; gap:16px; margin-bottom:22px;}
 
   .chart-panel{padding:20px; height:300px; display:flex; flex-direction:column; overflow:hidden;}
   .chart-panel canvas{flex:1; min-height:0; min-width:0; display:block;}
 
-  /* ranking */
   .rank-panel{padding:18px 20px;}
   .rank-item{display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--border); transition:background .15s ease; border-radius:4px; padding-left:6px; padding-right:6px; margin:0 -6px;}
   .rank-item:hover{background:rgba(255,255,255,0.03);}
@@ -164,7 +157,6 @@
   .rank-bar-fill{height:100%; background:linear-gradient(90deg, var(--blue), var(--normal)); border-radius:3px;}
   .rank-count{font-family:'IBM Plex Mono'; font-size:12px; color:var(--text-muted); width:26px; text-align:right;}
 
-  /* faixa cards */
   .faixa-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:22px;}
   .faixa-card{padding:18px 20px; border-left:3px solid var(--border); transition:box-shadow .15s ease, transform .1s ease;}
   .faixa-card:hover{transform:translateY(-1px);}
@@ -183,7 +175,6 @@
   .faixa-card.atencao .count{color:var(--atencao);}
   .faixa-card.normal .count{color:var(--normal);}
 
-  /* critical list */
   .crit-panel{padding:18px 20px; margin-bottom:22px;}
   .crit-list{display:flex; flex-direction:column; gap:8px; margin-top:6px;}
   .crit-row{
@@ -201,7 +192,6 @@
   .crit-info{flex:1; font-size:12.5px; color:var(--text-muted);}
   .crit-dias{font-family:'IBM Plex Mono'; font-size:13px; color:var(--critico); font-weight:600; flex-shrink:0;}
 
-  /* ---------- filters / search ---------- */
   .filter-bar{
     display:flex; align-items:center; gap:10px; flex-wrap:wrap;
     padding:14px 16px; margin-bottom:16px;
@@ -226,7 +216,6 @@
   .filter-chip.active.atencao{background:var(--atencao-dim); border-color:var(--atencao); color:#FFDDA0;}
   .filter-chip.active.normal{background:var(--normal-dim); border-color:var(--normal); color:#A9F2DD;}
 
-  /* ---------- table ---------- */
   .table-panel{padding:0; overflow:hidden;}
   .table-scroll{overflow-x:auto;}
   table{width:100%; border-collapse:collapse; font-size:12.5px;}
@@ -264,7 +253,6 @@
     font-family:'IBM Plex Mono'; font-size:11px;
   }
 
-  /* ---------- responsive ---------- */
   @media (max-width: 1100px){
     .kpi-grid{grid-template-columns:repeat(3,1fr);}
     .row-2{grid-template-columns:1fr;}
@@ -301,10 +289,8 @@
 
 <main>
 
-  <!-- KPIs -->
   <section class="kpi-grid" id="kpiGrid" aria-label="Indicadores executivos"></section>
 
-  <!-- Evolução + Ranking -->
   <div class="row-2">
     <div class="panel chart-panel">
       <div class="section-head">
@@ -322,10 +308,8 @@
     </div>
   </div>
 
-  <!-- Faixas -->
   <section class="faixa-grid" id="faixaGrid" aria-label="Veículos por faixa de dias"></section>
 
-  <!-- Filtros -->
   <div class="panel filter-bar">
     <input type="text" class="search-input" id="searchInput" placeholder="Buscar por placa, veículo, atendente, cliente ou fornecedor…">
     <select id="atendenteSelect" class="search-input" style="flex:0 0 200px; cursor:pointer;">
@@ -337,7 +321,6 @@
     <div class="filter-chip" data-status="normal">Normal</div>
   </div>
 
-  <!-- Tabela -->
   <section class="panel table-panel">
     <div class="table-scroll">
       <table>
@@ -363,7 +346,6 @@
     </div>
   </section>
 
-  <!-- Críticos -->
   <section class="panel crit-panel">
     <div class="section-head">
       <h2>🚨 Veículos críticos (≥ 4 dias parados)</h2>
@@ -379,12 +361,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script>
-/* ============================================================
-   INTEGRACAO GOOGLE SHEETS - Etapa 2
-   Le cada aba de atendente via endpoint publico (gviz CSV) e
-   combina tudo em um unico array. Requer que a planilha esteja
-   compartilhada como "Qualquer pessoa com o link pode visualizar".
-   ============================================================ */
 const SPREADSHEET_ID = '1Bk1LEYRj--LbEZx7gs8CMOlrR4kUcpVp';
 const ATENDENTES = [
   { nome: 'Diego Souza',      gid: '178284291' },
@@ -418,24 +394,25 @@ async function fetchAba(atendente){
     const parsed = Papa.parse(text, { skipEmptyLines: false });
     const rows = parsed.data;
 
-    // A célula "Código" (coluna A) e as colunas de data vêm em branco no
-    // export CSV desta planilha, então localizamos o cabeçalho pela dupla
-    // "Motivo" (col B) + "Placa" (col C), que sempre vem preenchida, e
-    // depois lemos os dados por posição fixa de coluna (0-indexado):
+    // Detecção robusta: em vez de procurar um texto de cabeçalho (que pode
+    // não existir em todas as abas — vide Pedro Afonso), procuramos
+    // diretamente a PRIMEIRA LINHA que parece um dado real: coluna A com
+    // um Código numérico e coluna C com uma Placa (formato alfanumérico).
+    // A partir dela lemos por posição fixa de coluna (0-indexado):
     // 0 Código, 1 Motivo, 2 Placa, 3 Modelo, 4 Cliente, 5 Fornecedor,
     // 6 Cidade, 7 Dt.Atendimento, 8 Dt.Agendamento, 9 Dt.Parada,
     // 10 Dias Parado, 11 Situação Atual, 12 Pendência, 13 Status,
     // 14 Prazo Liberação, 15 Veículo reserva, 16 Obs, 17 Classificação
-    var headerIdx = -1;
+    var dataStartIdx = -1;
     for(var h=0; h<rows.length; h++){
-      const c1 = (rows[h][1] || '').trim();
+      const c0 = (rows[h][0] || '').trim();
       const c2 = (rows[h][2] || '').trim();
-      if(c1 === 'Motivo' && c2 === 'Placa'){ headerIdx = h; break; }
+      if(/^\d{3,}$/.test(c0) && /^[A-Za-z0-9]{6,8}$/.test(c2)){ dataStartIdx = h; break; }
     }
-    if(headerIdx === -1) throw new Error('cabeçalho não encontrado (formato inesperado)');
+    if(dataStartIdx === -1) throw new Error('nenhuma linha de dado reconhecida (Código/Placa não encontrados)');
 
     const out = [];
-    for(var i = headerIdx + 1; i < rows.length; i++){
+    for(var i = dataStartIdx; i < rows.length; i++){
       const r = rows[i];
       const codigo = (r[0] || '').trim();
       const placa = (r[2] || '').trim();
@@ -476,9 +453,6 @@ async function carregarFrota(){
 }
 </script>
 <script>
-/* ============================================================
-   RENDERIZACAO - roda depois que "frota" foi carregada do Sheets
-   ============================================================ */
 const DIAS_BUCKETS = [
   { key: '0', label: '0', test: d => d === 0 },
   { key: '1', label: '1', test: d => d === 1 },
@@ -488,12 +462,11 @@ const DIAS_BUCKETS = [
   { key: '7-10', label: '7-10', test: d => d >= 7 && d <= 10 },
   { key: '11+', label: '11+', test: d => d >= 11 },
 ];
-let diasBucketFilter = null; // null = sem filtro por barra
-let barRects = []; // preenchido a cada desenho do gráfico, usado no clique
+let diasBucketFilter = null;
+let barRects = [];
 
 function renderDashboard(){
 
-/* ---------- KPIs ---------- */
 const total = frota.length;
 const mediaDias = (frota.reduce((s,v)=>s+v.dias,0)/total).toFixed(1);
 const criticos = frota.filter(v=>v.status==='critico').length;
@@ -516,7 +489,6 @@ document.getElementById('kpiGrid').innerHTML = kpiData.map(k => `
   </div>
 `).join('');
 
-/* ---------- Ranking atendentes ---------- */
 const rankMap = {};
 frota.forEach(v => rankMap[v.atendente] = (rankMap[v.atendente]||0)+1);
 const rankArr = Object.entries(rankMap).sort((a,b)=>b[1]-a[1]);
@@ -534,7 +506,6 @@ document.querySelectorAll('.rank-item').forEach(item => {
   item.addEventListener('click', () => {
     const nome = item.dataset.atendente;
     const select = document.getElementById('atendenteSelect');
-    // alterna: clicar de novo no mesmo atendente já selecionado volta pra "todos"
     const novoValor = (atendenteFilter === nome) ? 'todos' : nome;
     select.value = novoValor;
     atendenteFilter = novoValor;
@@ -544,7 +515,6 @@ document.querySelectorAll('.rank-item').forEach(item => {
   });
 });
 
-/* ---------- Faixas ---------- */
 const faixas = [
   {key:'critico', label:'Crítico', sub:'≥ 4 dias parado', count: criticos},
   {key:'atencao', label:'Atenção', sub:'2 a 3 dias parado', count: atencao},
@@ -571,7 +541,6 @@ document.querySelectorAll('.faixa-card').forEach(card => {
   });
 });
 
-/* ---------- Críticos ---------- */
 const criticosLista = frota.filter(v=>v.status==='critico').sort((a,b)=>b.dias-a.dias);
 document.getElementById('critCount').textContent = `${criticosLista.length} VEÍCULOS`;
 
@@ -593,7 +562,6 @@ function renderCriticos(){
 document.getElementById('critSearchInput').addEventListener('input', renderCriticos);
 renderCriticos();
 
-/* ---------- Distribuição por dias parado (dados reais, canvas nativo) ---------- */
 function desenharEvolucao(){
   const canvas = document.getElementById('evoChart');
   const evoRangeEl = document.getElementById('evoRange');
@@ -620,7 +588,6 @@ function desenharEvolucao(){
 
   ctx.clearRect(0,0,w,h);
 
-  // grid
   ctx.strokeStyle = 'rgba(255,255,255,0.06)';
   ctx.lineWidth = 1;
   for(let i=0;i<=3;i++){
@@ -630,14 +597,12 @@ function desenharEvolucao(){
 
   barRects = [];
 
-  // barras
   serie.forEach((v,i)=>{
     const x = padL + slot*i + (slot-barW)/2;
     const barH = (h - padT - padB) * (v/max);
     const y = h - padB - barH;
     const selecionada = diasBucketFilter === buckets[i].key;
 
-    // área clicável cobre a coluna inteira (mais fácil de acertar que só a barra)
     barRects.push({ x: padL + slot*i, y: padT, width: slot, height: h - padT - padB, key: buckets[i].key });
 
     if(selecionada){
@@ -655,7 +620,6 @@ function desenharEvolucao(){
     }
     ctx.globalAlpha = 1;
 
-    // valor acima da barra
     if(v > 0){
       ctx.fillStyle = 'rgba(231,234,240,0.9)';
       ctx.font = '600 11px IBM Plex Mono';
@@ -663,14 +627,12 @@ function desenharEvolucao(){
       ctx.fillText(v, x + barW/2, y - 6);
     }
 
-    // label do eixo x
     ctx.fillStyle = selecionada ? '#E7EAF0' : 'rgba(139,145,163,0.8)';
     ctx.font = selecionada ? '600 10px IBM Plex Mono' : '10px IBM Plex Mono';
     ctx.textAlign = 'center';
     ctx.fillText(buckets[i].label, x + barW/2, h - 6);
   });
 
-  // y labels
   ctx.fillStyle = 'rgba(139,145,163,0.8)';
   ctx.font = '10px IBM Plex Mono';
   ctx.textAlign = 'right';
@@ -696,20 +658,19 @@ evoCanvasEl.addEventListener('click', (e) => {
   document.querySelector('.table-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
 
-/* ---------- Ticker de alertas ---------- */
 const alertas = criticosLista.slice(0,6).map(v => `<b>${v.placa}</b> parado há ${v.dias} dias — ${v.motivo} (${v.atendente})`);
-document.getElementById('ticker').innerHTML = alertas.length
+const avisoErro = atendentesComErro.length
+  ? `<b>Falha ao carregar dados de: ${atendentesComErro.join(', ')}</b> — `
+  : '';
+document.getElementById('ticker').innerHTML = avisoErro + (alertas.length
   ? alertas.join('&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;')
-  : (atendentesComErro.length
-      ? `<b>Falha ao carregar dados de: ${atendentesComErro.join(', ')}</b> — verifique se as abas estão publicadas/compartilhadas.`
-      : 'Nenhum alerta crítico no momento.');
+  : (avisoErro ? '' : 'Nenhum alerta crítico no momento.'));
 
 desenharEvolucao();
 renderTable();
 
-} /* fim de renderDashboard() */
+}
 
-/* ---------- Tabela ---------- */
 let sortKey = 'dias';
 let sortDir = -1;
 let statusFilter = 'todos';
@@ -793,7 +754,6 @@ document.querySelectorAll('.filter-chip').forEach(chip => {
   chip.addEventListener('click', () => aplicarFiltroStatus(chip.dataset.status));
 });
 
-/* ---------- Relógio ---------- */
 function tickClock(){
   const now = new Date();
   document.getElementById('clock').textContent = now.toLocaleString('pt-BR', {
@@ -803,7 +763,6 @@ function tickClock(){
 tickClock();
 setInterval(tickClock, 1000);
 
-/* ---------- Init: carrega o Sheets e então renderiza tudo ---------- */
 carregarFrota().then(() => {
   const select = document.getElementById('atendenteSelect');
   ATENDENTES.forEach(a => {
