@@ -283,7 +283,7 @@
     </div>
     <div class="panel rank-panel">
       <div class="section-head">
-        <h2>Ranking de atendentes</h2>
+        <h2>Ranking de analistas</h2>
         <span class="eyebrow">POR VEÍCULOS EM CARTEIRA</span>
       </div>
       <div id="rankList"></div>
@@ -504,11 +504,9 @@ document.getElementById('rankList').innerHTML = rankArr.map((r,i) => `
 document.querySelectorAll('.rank-item').forEach(item => {
   item.addEventListener('click', () => {
     const nome = item.dataset.atendente;
-    const select = document.getElementById('atendenteSelect');
-    const novoValor = (atendenteFilter === nome) ? 'todos' : nome;
-    select.value = novoValor;
-    atendenteFilter = novoValor;
-    document.querySelectorAll('.rank-item').forEach(i => i.classList.toggle('active', i.dataset.atendente === novoValor));
+    if(atendenteFilter.has(nome)) atendenteFilter.delete(nome); else atendenteFilter.add(nome);
+    document.querySelectorAll('.rank-item').forEach(i => i.classList.toggle('active', atendenteFilter.has(i.dataset.atendente)));
+    atualizarSelectAtendente();
     renderTable();
     document.querySelector('.table-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
@@ -665,14 +663,14 @@ renderTable();
 let sortKey = 'dias';
 let sortDir = -1;
 let statusFilter = 'todos';
-let atendenteFilter = 'todos';
+let atendenteFilter = new Set();
 let searchTerm = '';
 let linhasFiltradasAtuais = [];
 
 function renderTable(){
   let rows = frota.filter(v => {
     const matchStatus = statusFilter === 'todos' || v.status === statusFilter;
-    const matchAtendente = atendenteFilter === 'todos' || v.atendente === atendenteFilter;
+    const matchAtendente = atendenteFilter.size === 0 || atendenteFilter.has(v.atendente);
     const bucket = diasBucketFilter ? DIAS_BUCKETS.find(b => b.key === diasBucketFilter) : null;
     const matchBucket = !bucket || bucket.test(v.dias);
     const term = searchTerm.toLowerCase();
@@ -729,10 +727,27 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 });
 
 document.getElementById('atendenteSelect').addEventListener('change', (e) => {
-  atendenteFilter = e.target.value;
-  document.querySelectorAll('.rank-item').forEach(i => i.classList.toggle('active', i.dataset.atendente === atendenteFilter));
+  const valor = e.target.value;
+  if(valor === 'todos'){ atendenteFilter.clear(); }
+  else if(atendenteFilter.has(valor)){ atendenteFilter.delete(valor); }
+  else{ atendenteFilter.add(valor); }
+  document.querySelectorAll('.rank-item').forEach(i => i.classList.toggle('active', atendenteFilter.has(i.dataset.atendente)));
+  atualizarSelectAtendente();
   renderTable();
 });
+
+function atualizarSelectAtendente(){
+  const select = document.getElementById('atendenteSelect');
+  const primeira = select.querySelector('option[value="todos"]');
+  if(atendenteFilter.size === 0){
+    primeira.textContent = 'Todos os atendentes';
+  } else if(atendenteFilter.size === 1){
+    primeira.textContent = Array.from(atendenteFilter)[0];
+  } else {
+    primeira.textContent = atendenteFilter.size + ' atendentes selecionados';
+  }
+  select.value = 'todos';
+}
 
 function aplicarFiltroStatus(status){
   statusFilter = status;
