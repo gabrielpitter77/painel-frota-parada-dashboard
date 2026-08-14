@@ -90,22 +90,7 @@
   }
   .live-label{font-family:'IBM Plex Mono'; font-size:11px; color:var(--text-muted); display:flex; align-items:center; gap:7px;}
   #clock{font-family:'IBM Plex Mono'; font-size:12px; color:var(--text-muted);}
-
-  .ticker-wrap{
-    border-top:1px solid var(--border);
-    background:var(--panel-2);
-    overflow:hidden; white-space:nowrap;
-    padding:7px 0;
-  }
-  .ticker{
-    display:inline-block; padding-left:100%;
-    animation:ticker 38s linear infinite;
-    font-family:'IBM Plex Mono'; font-size:12px; color:var(--text-muted);
-  }
-  .ticker b{color:var(--critico); font-weight:600;}
-  @keyframes ticker{ 0%{transform:translateX(0);} 100%{transform:translateX(-100%);} }
   @media (prefers-reduced-motion: reduce){
-    .ticker{animation:none; padding-left:24px;}
     .live-dot{animation:none;}
   }
 
@@ -281,9 +266,6 @@
       <div class="live-label"><span class="live-dot"></span> DADOS AO VIVO</div>
       <div id="clock" class="mono">--:--:--</div>
     </div>
-  </div>
-  <div class="ticker-wrap">
-    <div class="ticker" id="ticker">Carregando alertas da frota…</div>
   </div>
 </header>
 
@@ -657,14 +639,6 @@ evoCanvasEl.addEventListener('click', (e) => {
   renderTable();
   document.querySelector('.table-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
-
-const alertas = criticosLista.slice(0,6).map(v => `<b>${v.placa}</b> parado há ${v.dias} dias — ${v.motivo} (${v.atendente})`);
-const avisoErro = atendentesComErro.length
-  ? `<b>Falha ao carregar dados de: ${atendentesComErro.join(', ')}</b> — `
-  : '';
-document.getElementById('ticker').innerHTML = avisoErro + (alertas.length
-  ? alertas.join('&nbsp;&nbsp;&nbsp;·&nbsp;&nbsp;&nbsp;')
-  : (avisoErro ? '' : 'Nenhum alerta crítico no momento.'));
 
 desenharEvolucao();
 renderTable();
