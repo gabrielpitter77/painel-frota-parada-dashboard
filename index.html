@@ -350,7 +350,7 @@ const ATENDENTES = [
   { nome: 'Diego Souza',      gid: '178284291' },
   { nome: 'Pedro Afonso',     gid: '425722359' },
   { nome: 'Cassiano Soares',  gid: '1599838857' },
-  { nome: 'Gabriel Lima',     gid: '971139963' },
+  { nome: 'Gustavo Silva',    gid: '971139963' },
   { nome: 'Leonardo Reis',    gid: '2095742271' },
   { nome: 'Henrique Regis',   gid: '1553752893' },
   { nome: 'Rafael Oelze',     gid: '1442892449' },
@@ -393,7 +393,7 @@ async function fetchAba(atendente){
       const c2 = (rows[h][2] || '').trim();
       if(/^\d{3,}$/.test(c0) && /^[A-Za-z0-9]{6,8}$/.test(c2)){ dataStartIdx = h; break; }
     }
-    if(dataStartIdx === -1) throw new Error('nenhuma linha de dado reconhecida (Código/Placa não encontrados)');
+    if(dataStartIdx === -1) return []; // aba sem nenhum carro parado = 0 veículos (não é erro)
 
     const out = [];
     for(var i = dataStartIdx; i < rows.length; i++){
